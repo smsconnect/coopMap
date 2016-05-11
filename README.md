@@ -29,6 +29,4 @@ Users can also filter the points by clicking the filter button at the bottom of 
 
   - A solution for this is to make the company list an accordion (or something similar) so that a user can click and industry and the list will expand to show a description of the selected co-op company.
   
-  - This allows us to tailor the description to fit the co-ops that our students are doing (whereas just linking to the website of a large company can be ambigious and not helpful).
-  
-  - **Although**, this would take a great deal of work to update the dataset with a description of each company.
+  - This allows us to tailor the description to fit the co-ops that our students are doing (whereas just linking to the website of a large company can be ambigious and not helpful). **Although**, this would take a great deal of work to update the dataset with a description of each company.
