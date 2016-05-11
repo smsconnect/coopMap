@@ -1,0 +1,72 @@
+.navigation {
+
+  background: #909090;
+  height: 75px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+
+  @media screen and (max-width: 767px) {
+    height: 45px;
+  }
+
+  .navigation_back-button {
+
+    background: rgba(0, 0, 0, 0.35);
+    width: 195px;
+    height: 100%;
+
+    @media screen and (max-width: 767px) {
+      width: 105px;
+    }
+
+
+    a {
+      color: white;
+      height: 100%;
+      font-size: 36px;
+      line-height: 46px;
+      margin: 0;
+      font-family: avenir-heavy;
+      padding-left: 45px;
+      padding-top: 16px;
+      text-decoration: none;
+      display: block;
+
+      @media screen and (max-width: 767px) {
+        font-size: 25px;
+        line-height: 30px;
+        padding-left: 15px;
+        padding-top: 9px;
+      }
+    }
+
+    &--bottom {
+      background: rgba(0, 0, 0, 0);
+      width: auto;
+      height: 100%;
+
+      a {
+        text-decoration: none;
+        color: white;
+        height: 100%;
+        font-size: 36px;
+        line-height: 46px;
+        margin: 0;
+        font-family: avenir-heavy;
+        padding-left: 0px;
+        padding-top: 16px;
+        text-align: center;
+        display: block;
+
+      @media screen and (max-width: 767px) {
+          font-size: 25px;
+          line-height: 30px;
+          //padding-left: 15px;
+          padding-top: 9px;
+        }
+      }
+    }
+  }
+}

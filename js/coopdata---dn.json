@@ -1,0 +1,49 @@
+[
+        {
+            city:"Albany",
+            state:"NY",
+            lat: 42.659178,
+            long: -73.784792,
+            country: "US",
+            companies:[
+                {
+                    name:"Dogtown",
+                    website:"http://www.google.com"
+                },
+                {
+                    name:"Peabody",
+                    website:"http://www.google.com"
+                }
+            ]
+        },
+        {
+            city:"Alexandria",
+            state:"VA",
+            lat: 38.817311,
+            long: -77.069165,
+            country: "US",
+            companies:[
+                {
+                    name:"Connect",
+                    website:"http://www.nhl.com"
+                }
+            ]
+        },
+        {
+            city:"Burbank",
+            state:"CA",
+            lat: 34.1820104,
+            long: -118.3252111,
+            country: "US",
+            companies:[]
+        },
+        {
+            city:"Genoa",
+            state:undefined,
+            lat:44.4466289,
+            long:9.0732185,
+            country:"IT",
+            companies:[]
+        }
+    
+    ];

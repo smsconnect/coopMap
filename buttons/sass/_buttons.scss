@@ -1,0 +1,32 @@
+  /*@font-face {
+    font-family: "Avenir-Book";
+    src: url("../fonts/AvenirLTStd-Book.otf");
+  }*/
+
+$background-color: #000;
+//$border-color: #fff;
+.button {
+  background-color: $background-color; //probably will be changed when using Olivia's buttons
+  border-radius: 100%;
+  //border: 2px solid $border-color;
+  bottom: 2.5%;
+  color: #fff;                          //will be changed when using Olivia's buttons
+  left: 8%;
+  padding: 2%;                    //will be changed when using Olivia's buttons
+  position: fixed;
+  width: 11%;
+  max-width: 50px;
+  z-index: 5;
+
+  &.nav {
+    svg {
+      width: 85%;
+      height: 85%;
+      margin: 12% 7% 3% 8%;
+    }
+  }
+
+  &#active {
+    background: rgba(0,0,0,.85); //background change on touch event
+  }
+}

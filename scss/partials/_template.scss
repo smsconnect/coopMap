@@ -1,0 +1,506 @@
+// -------------- PARTIALS ------------------
+
+@import "partials/reset";
+@import "partials/fonts";
+
+//contains navigation
+@import "partials/back-button";
+
+//@import "partials/dps-interactions";
+@import "bourbon/bourbon";
+@import "neat/neat";
+
+
+//// -------------- VARIABLES -----------------
+
+//colors used in article
+//$template_color--main--blue: #1c5692;
+//$template_color--accent--red: #e63946;
+//$template_color--accent--green: #06d6a0;
+//$template_color--accent--yellow: #ffcc08;
+//$template_color--accent--blue: #25a5c4;
+//$template_color--accent--orange: #F36E21;
+//$template_color--accent--off-white: #e8ebe4;
+
+//breakpoints for below and above ipad screen sizes
+$first-breakpoint-value: 0px;
+$second-breakpoint-value: 475px;
+$third-breakpoint-value: 767px;
+$small-viewport: new-breakpoint(min-width $first-breakpoint-value max-width $second-breakpoint-value);
+$medium-viewport: new-breakpoint(min-width $second-breakpoint-value max-width $third-breakpoint-value);
+$large-viewport: new-breakpoint(min-width $third-breakpoint-value + 1);
+
+
+// --------------------- MIXINS ----------------------
+//styling for the image
+@mixin contained-image {
+  img {
+    display: block;
+    width: 100%;
+
+    &.half {
+      float: left;
+      width: 50%;
+    }
+  }
+}
+
+@mixin template_pull-quote--color-fix {
+  @if $article_color--accent == $template_color--accent--green {
+    background-color: #000;
+    span.template_pull-quote--author {
+      color: white;
+    }
+  } @else if $article_color--accent == $template_color--accent--yellow {
+      background-color: #000;
+      color: white;
+      span.template_pull-quote--author {
+        color: $article_color--accent;
+      }
+  } @else if $article_color--accent == $template_color--accent--off-white {
+      color: #646464;
+  }
+}
+
+@mixin template_caption--color-fix {
+  @if $article_color--accent == $template_color--accent--green {
+    color: white;
+    background-color: rgba( 0, 0, 0, .6 );
+
+    @if  media($small-viewport) {
+      background-color: rgba( 0, 0, 0, .9 );
+    }
+
+  } @else if $article_color--accent == $template_color--accent--yellow {
+    color: white;
+    background-color: rgba( 0, 0, 0, .6 );
+
+    @if  media($small-viewport) {
+      background-color: rgba( 0, 0, 0, .9 );
+    }
+
+  } @else if $article_color--accent == $template_color--accent--off-white{
+    p.template_caption-title {
+      color: #303030;
+    }
+
+    @if  media($small-viewport) {
+      //background-color: rgba( 0, 0, 0, .9 );
+    }
+
+  }
+}
+
+
+// ------------- TEMPLATE ELEMENT STYLES ------------------
+
+//NAVIGATION COLOR
+.navigation {
+  background: $article_color--accent;
+}
+
+// CONTAINER ELEMENT STYLES - everything below the navigation element should be wrapped in a div with the class "container"
+.template_container {
+  background-color: #fff;
+  padding: 40px 45px 40px;
+  font-family: avenir-light;
+
+  @include media($medium-viewport) {
+    //margin: 45px 0px;
+    padding: 30px 30px 30px 30px;
+  }
+
+  @include media($small-viewport) {
+    //margin: 45px 0px;
+    padding: 20px 20px 15px 20px;
+  }
+}
+
+
+// HEADER STYLES
+//Main article title should be the only one wrapped in an "h1" tag. Other headers are used throughout the article
+
+h1{
+  color: #303030;
+}
+
+h2,
+h3,
+h4 {
+  color: #303030;
+}
+
+h1 {
+  font-family: avenir-heavy;
+  font-size: 40px;
+  line-height: 46px;
+
+  @include media($medium-viewport) {
+    font-size: 38px;
+    line-height: 40px;
+  }
+
+  @include media($small-viewport) {
+    font-size: 25px;
+    line-height: 30px;
+  }
+}
+
+h2 {
+  font-family: avenir-heavy;
+  font-size: 34px;
+  line-height: 38px;
+  margin: 30px 40px 20px;
+  border-bottom: 2px solid rgba( 0, 0, 0, .5);
+  padding-bottom: 5px;
+
+  @include media($medium-viewport) {
+    font-size: 28px;
+    line-height: 30px;
+    margin: 0px 0px;
+    padding-bottom: 5px;
+  }
+
+  @include media($small-viewport) {
+    font-size: 20px;
+    line-height: 30px;
+    margin: 0px 0px;
+    padding-bottom: 5px;
+  }
+}
+
+h3 {
+  font-family: avenir-heavy;
+  font-size: 28px;
+  line-height: 38px;
+  margin: 30px 40px 20px;
+
+  @include media($medium-viewport) {
+    font-size: 24px;
+    line-height: 36px;
+    margin: 0px 0px;
+  }
+
+  @include media($small-viewport) {
+    font-size: 20px;
+    line-height: 30px;
+    margin: 0px 0px;
+  }
+}
+
+h4 {
+  font-family: avenir-medium;
+  font-style: italic;
+  font-size: 28px;
+  line-height: 38px;
+  margin: 30px 40px 20px;
+
+  @include media($medium-viewport) {
+    font-size: 24px;
+    line-height: 30px;
+    margin: 0px 0px;
+  }
+
+  @include media($small-viewport) {
+    font-size: 20px;
+    line-height: 30px;
+    margin: 0px 0px;
+  }
+}
+
+
+// BYLINE (AUTHOR AND DATE BELOW ARTICLE TITLE) STYLES
+.template_byline {
+  font-size: 20px;
+  font-style: italic;
+  margin: 0;
+
+  @include media($medium-viewport) {
+    font-size: 18px;
+  }
+
+  @include media($small-viewport) {
+    font-size: 16px;
+  }
+}
+
+
+// PARAGRAPH STYLES
+
+p {
+  font-size: 24px;
+  line-height: 36px;
+  margin: 20px 40px;
+
+  @include media($medium-viewport) {
+    font-size: 22px;
+    line-height: 30px;
+    margin: 15px 0px;
+  }
+
+  @include media($small-viewport) {
+    font-size: 18px;
+    line-height: 30px;
+    margin: 15px 0px;
+  }
+
+  // SIZING AND STYLING FOR DROP CAP -- needs to be applied to the paragraph where there will be a drop cap
+  // *** Also need to include span with class "drop-cap" (below) to change the color of the word with the drop cap ***
+  &.template_drop-cap:first-letter {
+    float: left;
+    color: $article_color--accent;
+    font-size: 123px;
+    line-height: 82px;
+    padding-top: 21px;
+    padding-right: 8px;
+    padding-left: 0px;
+    font-family: avenir-heavy;
+  }
+
+  &.template_introduction {
+    margin: 20px 0px;
+
+    @include media($small-viewport) {
+      margin: 10px 0px;
+
+    }
+
+  }
+}
+
+// PULL QUOTE STYLE
+// *** Do not use if accent color is yellow, green, or off-white ***
+
+.template_pull-quote {
+  font-family: avenir-heavy;
+  font-size: 34px;
+  line-height: 38px;
+  margin: 50px 40px 50px;
+  border-bottom: 3px solid $article_color--accent;
+  padding: 20px;
+  color: $article_color--accent;
+  background-color: rgba(225,225,225, 0.5);
+  overflow: hidden;
+
+  @include template_pull-quote--color-fix;
+
+  .template_pull-quote--author{
+    font-style:italic;
+    font-size: 24pt;
+    color: rgb(100,100,100);
+    float: right;
+
+    @include media($medium-viewport) {
+      font-size: 18px;
+    }
+
+    @include media($small-viewport) {
+      font-size: 18px;
+    }
+  }
+
+  @include media($medium-viewport) {
+    font-size: 22px;
+    line-height: 30px;
+    margin-left: 25px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+
+    @include template_pull-quote--color-fix;
+  }
+
+  @include media($small-viewport) {
+    font-size: 20px;
+    line-height: 30px;
+    margin: 0px 0px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+
+    @include template_pull-quote--color-fix;
+  }
+}
+
+
+// SPAN STYLES
+
+span {
+  // APPLY ACCENT COLOR TO SPAN OF TEXT
+  &.template_accent-color {
+    color: $article_color--accent;
+  }
+
+  // BOLD A SPAN OF TEXT
+  &.template_bold {
+    font-family: avenir-heavy;
+  }
+
+  // SET SPAN OF TEXT TO AVENIR MEDIUM
+  &.template_medium {
+    font-family: avenir-medium;
+  }
+
+  // COLOR FOR DROP CAP WORD -- *** put span around entire word, not just the drop cap color ***
+  // *** Also need to include class "drop-cap" on the <p> tag (above) to have correct drop-cap sizing and styling
+  &.template_drop-cap {
+    color: $article_color--accent;
+  }
+
+  // LARGER STYLIZED NUMBERS
+  // *** Originally was Futura in Olivia's design - may change it back ***
+  &.template_number {
+    color: $article_color--accent;
+    display: block;
+    font-size: 80px;
+    line-height: 95px;
+    font-family: futura;
+
+    @include media($small-viewport) {
+      font-size: 60px;
+      line-height: 60px;
+    }
+  }
+}
+
+
+// VIDEO STYLES
+video{
+  display: block;
+}
+
+
+// IMAGE STYLES
+
+// DIV THAT SURROUNDS AN <IMG> TAG
+// *** All <img> tags should be contained in a div with the class ".template_img-div" ***
+.template_img-div {
+  margin: 40px;
+  position: relative;
+
+  &.template_top {
+    margin:40px 0px;
+
+    // MIXIN (above in mixin section) ACTUAL <IMG> TAG STYLES
+    @include contained-image;
+
+    @include media($medium-viewport) {
+      margin: 20px 0px;
+    }
+
+    @include media($small-viewport) {
+      margin: 20px 0px;
+    }
+  }
+
+  &.template_full {
+    display: block;
+    left: -45px;
+    position: relative;
+    width: calc(100% + 90px); //******************** has to be changed if container-padding changes
+    margin: 40px 0px;
+
+    @include media($medium-viewport) {
+      margin: 20px 0px;
+    }
+
+    @include media($small-viewport) {
+      width: calc(100% + 40px);
+      left: -20px;
+      margin: 20px 0px;
+    }
+  }
+
+  // MIXIN (above in mixin section) ACTUAL <IMG> TAG STYLES
+  @include contained-image;
+
+  //DEFAULT FULL SCREEN IMAGES FOR MOBILE --even if not ".template_full" class above for full-screen on tablet
+  @include media($medium-viewport) {
+    margin: 20px 0px;
+  }
+
+  @include media($small-viewport) {
+    width: calc(100% + 40px);
+    left: -20px;
+    margin: 20px 0px;
+  }
+
+  // DIV THAT SURROUNDS A CAPTION
+  // *** All ".template_caption" divs should be contained in a corresponding image's div with the class ".template_img-div" ***
+  .template_caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: rgba( 255, 255, 255, 0.8);
+    width: 60%;
+    padding: 5px 15px 10px;
+
+    @include template_caption--color-fix;
+
+    @include media($medium-viewport) {
+      padding: 7px 15px;
+      width: auto;
+
+      @include template_caption--color-fix;
+
+    }
+
+    @include media($small-viewport) {
+      background-color: rgba(0, 0, 0, .15);
+      padding: 7px 15px;
+      width: auto;
+      position: static;
+
+      @include template_caption--color-fix;
+    }
+
+    // <P> TAG CONTAINING THE CAPTION TITLE
+    // *** needs to be within a div with the class ".template_caption" (above)
+    .template_caption-title {
+      color: $article_color--accent;
+      font-family: avenir-heavy;
+      font-size: 20px;
+      line-height: 25.2px;
+      margin: 5px auto;
+
+      @include media($medium-viewport) {
+        font-size: 18px;
+        line-height: 23px;
+        margin: 1px auto;
+      }
+
+      @include media($small-viewport) {
+        font-size: 18px;
+        line-height: 23px;
+        margin: 1px auto;
+      }
+    }
+
+    // <P> TAG CONTAINING THE CAPTION DESCRIPTION
+    // *** needs to be within a div with the class ".template_caption" (above)
+    .template_caption-description {
+      font-family: avenir-light;
+      font-size: 17px;
+      line-height: 20.4px;
+      margin: auto;
+
+      @include media($medium-viewport) {
+        font-size: 16px;
+      }
+
+      @include media($small-viewport) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.template_right {
+  float: right;
+}
+
+.template_left {
+  float: left;
+}
+
+.template_overflow-hidden{
+  overflow: hidden;
+}
