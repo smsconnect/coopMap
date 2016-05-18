@@ -457,7 +457,8 @@ body {
   position: absolute;
   width: 40%;
   z-index: 100;
-  transition: opacity .5s; }
+  transition: opacity .5s;
+  cursor: pointer; }
   @media screen and (min-width: 500px) {
     .filter-button {
       width: 200px;
@@ -500,6 +501,8 @@ body {
   position: relative;
   float: left;
   width: 100%; }
+  .filter-selection p {
+    cursor: pointer; }
   .filter-selection p,
   .filter-selection .list {
     width: calc( 50% - 3px);
@@ -546,7 +549,8 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  width: 50px; }
+  width: 50px;
+  cursor: pointer; }
   .close .close--position {
     color: white;
     font-weight: 300;
@@ -636,6 +640,8 @@ body {
     height: 100%;
     width: 100%; }
 
+#all-div p {
+  cursor: pointer; }
 #all-div p,
 #all-div .list {
   width: 100%;

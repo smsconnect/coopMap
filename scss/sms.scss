@@ -109,6 +109,7 @@ p {
   width: 40%;
   z-index: 100;
   transition: opacity .5s;
+  cursor: pointer;
 
   @include media( 500px ) {
     width: 200px;
@@ -176,6 +177,10 @@ p {
   width: 100%;
   //clear: both;
   //top: 20px;
+
+  p {
+    cursor: pointer;
+  }
 
   p,
   .list {
@@ -254,6 +259,7 @@ p {
     right: 0;
     top: 0;
     width: 50px;
+    cursor: pointer;
 
   .close--position {
     color: white;
@@ -375,6 +381,10 @@ p {
 }
 
 #all-div {
+
+  p {
+    cursor: pointer;
+  }
 
   p,
   .list {
