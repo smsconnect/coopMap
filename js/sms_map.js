@@ -378,7 +378,6 @@ var SMSMap = {
      */
     drawPoints: function(){
       for( var i=0; i<SMSMap.mapPoints.length; i++ ){
-          //console.log("coleslaw");
           SMSMap.mapPoints[i].setMap(SMSMap.map);
       }
     },
