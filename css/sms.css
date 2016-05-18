@@ -502,7 +502,15 @@ body {
   float: left;
   width: 100%; }
   .filter-selection p {
-    cursor: pointer; }
+    cursor: pointer;
+    -webkit-user-select: none;
+    /* webkit (safari, chrome) browsers */
+    -moz-user-select: none;
+    /* mozilla browsers */
+    -khtml-user-select: none;
+    /* webkit (konqueror) browsers */
+    -ms-user-select: none;
+    /* IE10+ */ }
   .filter-selection p,
   .filter-selection .list {
     width: calc( 50% - 3px);
@@ -641,7 +649,15 @@ body {
     width: 100%; }
 
 #all-div p {
-  cursor: pointer; }
+  cursor: pointer;
+  -webkit-user-select: none;
+  /* webkit (safari, chrome) browsers */
+  -moz-user-select: none;
+  /* mozilla browsers */
+  -khtml-user-select: none;
+  /* webkit (konqueror) browsers */
+  -ms-user-select: none;
+  /* IE10+ */ }
 #all-div p,
 #all-div .list {
   width: 100%;
