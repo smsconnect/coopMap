@@ -183,14 +183,14 @@ var SMSMap = {
           if( SMSMap.filterEmpty ) {
             if( SMSMap.filterWarning ) {
               SMSMap.filterWarning.style.opacity = 1;
-              SMSMap.testChangeAllowFilter( SMSMap.filterMainButton, false );
+              SMSMap.changeAllowFilter( SMSMap.filterMainButton, false );
             } else {
               SMSMap.filterWarning = document.getElementsByClassName( 'filter-warning' )[0];
               SMSMap.filterWarning.style.opacity = 1;
-              SMSMap.testChangeAllowFilter( SMSMap.filterMainButton, false );
+              SMSMap.changeAllowFilter( SMSMap.filterMainButton, false );
             }
           } else { //else hide filter interface and draw the filtered points
-            SMSMap.testfilterUpdatePast();
+            SMSMap.filterUpdatePast();
             SMSMap.doFilter();
             SMSMap.drawPoints();
           }
@@ -787,7 +787,7 @@ var SMSMap = {
       SMSMap.allMapPoints = true;
 
       allP.onclick = function(){
-        SMSMap.testManageSelectedFilters( this );
+        SMSMap.manageSelectedFilters( this );
       }
     },
 
@@ -814,7 +814,7 @@ var SMSMap = {
           stateFilter.appendChild(stateP);
 
           stateP.onclick = function(){
-            SMSMap.testManageSelectedFilters( this );
+            SMSMap.manageSelectedFilters( this );
           };
         }
     },
@@ -844,7 +844,7 @@ var SMSMap = {
         }
 
         industryP.onclick = function(){
-          SMSMap.testManageSelectedFilters( this );
+          SMSMap.manageSelectedFilters( this );
         };
       }
     },
@@ -910,65 +910,116 @@ var SMSMap = {
 
 
 
-    //-----------Functions Below ------------------------
-    //A metric ton of filter comparison functions that check the current selected filter
+    //-----------Filter State Functions Below ------------------------
+    //Some filter comparison functions that check the current selected filter
     //against the past selected filter and compare elements within the current selected filter
-    //to determine which elements can be selected and can't be and change their classes to reflect that.
+    //to determine which elements can be selected and can't be, while changing their classes to reflect that.
     //
     //For example: if the user selects two states they will have a selected class applied to them,
-    //but then if the user selects the 'all states' option then these two states will now be deselected
-    //and have the default class applied to them, and the 'all states' button will have the selected class applied to it.
+    //but then if the user selects the 'All States' option then these two states will now be deselected
+    //and have the default class applied to them, and the 'All States' filter selection
+    //will now have the selected class applied to it.
     //
     //^^ This happens because you can't select two states and all states at the same time
-    //
-    //vv and that kind of stuff just happens a lot and these functions deal with that
+    //...and that kind of stuff just happens a lot and these functions deal with that
 
 
-    testManageSelectedFilters: function ( touched ) {
+
+    /**
+     * Kicks off the filter comparison process that determines if the user's filter selection
+     * is new, and if there are any warnings to be displayed (example warning: no results for that filter selection)
+     *
+     * @param  {object} touched Element that users selected in the filter
+     */
+    manageSelectedFilters: function ( touched ) {
+      var filterButton = SMSMap.filterMainButton;
+
+      //if there was a filter warning visible lets hide it for now because the user made a new filter selection
       if( SMSMap.filterWarning ) {
         SMSMap.filterWarning.style.opacity = 0;
       }
 
-      var filterButton = SMSMap.filterMainButton;
-
+      //don't allow filter until we check out the situation
       SMSMap.filterAllowed = false;
-      SMSMap.testFilterCompareCurrent( touched );
 
-      if ( SMSMap.testfilterPastSameAsCurrent() || SMSMap.currentFiltered.length === 0 ) {
-        SMSMap.testChangeAllowFilter( filterButton, false );
-      } else {
-        SMSMap.testChangeAllowFilter( filterButton, true );
+      //compares the live filter changes to each other to determine css changes and filter highlighting
+      SMSMap.filterCompareCurrent( touched );
+
+      //if the past and the current filters are the same or there is nothing in the current filter then do not allow user to filter
+      if ( SMSMap.filterPastSameAsCurrent() || SMSMap.currentFiltered.length === 0 ) {
+        SMSMap.changeAllowFilter( filterButton, false );
+      }
+      else { //otherwise allow user to filter
+        SMSMap.changeAllowFilter( filterButton, true );
       }
     },
 
 
 
-    testFilterCompareCurrent: function ( touched ) {
+    /**
+     * Checks if the selected element was already selected by the user, and handles
+     * removing or adding the selection from/to the 'currentFiltered' array and the
+     * styling changes that should accompany these changes.
+     *
+     * @param  {object} touched Element that users selected in the filter
+     */
+    filterCompareCurrent: function ( touched ) {
+      //get index of touched element in the 'currentFiltered' array
       var ind = SMSMap.currentFiltered.indexOf( touched );
 
+      //if the element isn't in the 'currentFiltered' array then call some functions
+      //to check if the 'All Map Points' or the 'All States' filter elements were selected,
+      //then add the selected element to the 'currentFiltered' array, then change the
+      //style of the selected filter element
       if ( ind === -1 ) {
-        SMSMap.testfilterChangeAllMapPoints( touched );
-        SMSMap.testfilterChangeAllStates( touched );
+        SMSMap.filterChangeAllMapPoints( touched );
+        SMSMap.filterChangeAllStates( touched );
 
         SMSMap.currentFiltered.push( touched );
-        SMSMap.testfilterChangeSelected( touched, true );
-      } else {
+        SMSMap.filterChangeSelected( touched, true );
+      }
+      //Otherwise remove the element from the 'currentFiltered' array, then
+      //change the style of the selected filter element
+      else {
         SMSMap.currentFiltered.splice( ind, 1);
-        SMSMap.testfilterChangeSelected( touched, false );
+        SMSMap.filterChangeSelected( touched, false );
       }
     },
 
 
 
-    testfilterChangeAllMapPoints: function ( touched ) {
+    /**
+     * The 'All Map Points' filter selection clears all other current selections
+     * that were previously selected, and all other filter selections will clear
+     * the 'All Map Points' selection if it was previously selected.
+     *
+     * This function checks the value of the touched element, and if it is the
+     * 'All Map Points' filter selection then remove all elements from the
+     * current selected array and records that 'All Map Points' is now selected.
+     *
+     * If the touched element was not 'All Map Points' then check to see if 'All
+     * Map Points' was just selected; if it was then we deselect it and record this.
+     *
+     * @param  {object} touched Element that users selected in the filter
+     */
+    filterChangeAllMapPoints: function ( touched ) {
+      //if the filter selection is 'All Map Points'
       if ( touched.value === "All Map Points" ) {
+        //loop through 'currentFiltered' array to change the style of the elements
+        //that will be removed from 'currentFiltered' array
         for (i = 0; i < SMSMap.currentFiltered.length; i++) {
-          SMSMap.testfilterChangeSelected( SMSMap.currentFiltered[i], false);
+          SMSMap.filterChangeSelected( SMSMap.currentFiltered[i], false);
         }
+        //empty the 'currentFiltered' array
         SMSMap.currentFiltered = [];
+        //record that 'All Map Points' is now selected
         SMSMap.allMapPoints = true;
-
-      } else if( SMSMap.allMapPoints ) {
+      }
+      //if the selected filter was not 'All Map Points'
+      else if( SMSMap.allMapPoints ) {
+        //loop through all 'currentFiltered' array elements, and if one of them
+        //is 'All Map Points reset its class value, splice it from the array, and
+        //record this deselected state.'
         for ( var a = 0; a < SMSMap.currentFiltered.length; a++ ) {
           if ( SMSMap.currentFiltered[a].value === "All Map Points" ) {
             SMSMap.currentFiltered[a].className = "list";
@@ -982,14 +1033,32 @@ var SMSMap = {
 
 
 
-    testfilterChangeAllStates: function ( touched ) {
+    /**
+     * The 'All States' filter selection clears all other current selections
+     * that were states, and all state filter selections will clear
+     * the 'All States' selection if it was previously selected.
+     *
+     * This function checks the value of the touched element, and if it is the
+     * 'All States' filter selection then remove all state elements from the
+     * current selected array and records that 'All States' is now selected.
+     *
+     * If the touched element was not 'All States' then check to see if
+     * 'All States' was just selected; if it was then we deselect it and record this.
+     *
+     * @param  {object} touched Element that users selected in the filter
+     */
+    filterChangeAllStates: function ( touched ) {
+      //if the selection is 'All States'
       if ( touched.value === "All States" ) {
+        //make temp array
         var tempArr = [];
 
+        //store all 'currentFiltered' elements in a temp array
         for( var b = 0; b < SMSMap.currentFiltered.length; b++ ) {
           tempArr[b] = SMSMap.currentFiltered[b];
         }
 
+        //go through the temp array, splice out any states and reset their class
         for (i = 0; i < tempArr.length; i++) {
           if ( tempArr[i].value.length === 2 ) { // change  --- this is a bad way of determining if it is state...should have function to compare 'touched.value' to stateArray
             var location = SMSMap.currentFiltered.indexOf( tempArr[i] );
@@ -1000,9 +1069,15 @@ var SMSMap = {
             }
           }
         }
+        //record that 'All States' is now selected
         SMSMap.allStates = true;
-      } else if ( SMSMap.allStates ) {
+      }
+      //otherwise, if 'All States' was just selected
+      else if ( SMSMap.allStates ) {
+        //if the selected filter was a state
         if ( touched.value.length === 2 ) { // change  --- this is a bad way of determining if it is state...should have function to compare 'touched.value' to stateArray
+          //go through the 'currentSelected' array to find 'All States', splice it out,
+          //reset its class, and record this
           for ( var a = 0; a < SMSMap.currentFiltered.length; a++ ) {
             if ( SMSMap.currentFiltered[a].value === "All States" ) {
               SMSMap.currentFiltered[a].className = "list not-half";
@@ -1017,23 +1092,37 @@ var SMSMap = {
 
 
 
-    testfilterChangeSelected: function ( touched, action ) {
+    /**
+     * Changes the class of the selected element so that the css styling changes
+     * and shows the user that it is selected/deselected. Needed to add regex because
+     * some of the elements have a not half-width addition to their className and some don't.
+     *
+     * @param  {object} touched  Element that users selected in the filter
+     * @param  {boolean} action  True = change class to selected, False = change class to deselected
+     */
+    filterChangeSelected: function ( touched, action ) {
+      //regex used to determine if the string 'not-half' is in the class name
       var halfCheck = /\bnot-half\b/;
 
+      //if we are changing the class to the selected state
       if ( action === true ) {
-
+        //test the regex and if it matches change to 'not-half' selected class
         if ( halfCheck.test( touched.className ) ) {
           touched.className = "current not-half";
         }
+        //otherwise change to normal selected class
         else {
           touched.className = "current";
         }
 
-      } else {
-
+      }
+      //otherwise we are changing the class to the deselected state
+      else {
+        //test the regex and if it matches change to 'not-half' deselected class
         if ( halfCheck.test( touched.className ) ) {
           touched.className = "list not-half";
         }
+        //otherwise change to normal deselected class
         else {
           touched.className = "list";
         }
@@ -1043,30 +1132,48 @@ var SMSMap = {
 
 
 
-    testfilterPastSameAsCurrent: function () {
+    /**
+     * Compares the last executed filter and the current selected filter.
+     *
+     * @return {boolean} True if the filter arrays are the same, False is different
+     */
+    filterPastSameAsCurrent: function () {
       var curr = SMSMap.currentFiltered;
       var past = SMSMap.pastFiltered;
 
+      //if the lengths of the arrays are not equal then they aren't the same
       if ( curr.length != past.length ) {
         return false;
       }
 
+      //for every element in the current array see if that element exists in the past array
       for ( var i = 0; i < curr.length; i++ ) {
         if ( past.indexOf( curr[i] ) == -1 ) {
           return false;
         }
       }
 
+      //else the arrays are the same for our purposes
       return true;
     },
 
 
 
-    testChangeAllowFilter: function ( button, action ) {
+    /**
+     * Changes the status of whether or not the user is allowed to execute the filter,
+     * and changes the style of the filter button by changing its id.
+     *
+     * @param  {object} button The filter button element that users press
+     * @param  {boolean} action True = enable filter, False = disable filter
+     */
+    changeAllowFilter: function ( button, action ) {
+      //if the action is true change style of button and allow user to filter
       if ( action === true ) {
         button.id = "filter-calc-ready";
         SMSMap.filterAllowed = true;
-      } else {
+      }
+      //if action is fault change style of button and don't allow user to filter
+      else {
         button.id = "filter-calc";
         SMSMap.filterAllowed = false;
       }
@@ -1074,14 +1181,22 @@ var SMSMap = {
 
 
 
-    testfilterUpdatePast: function () {
+    /**
+     * Clear the 'pastFiltered' array and copy everything in the 'currentFiltered'
+     * arry into the empty 'partFiltered' array. Then disallow the filter for the next
+     * time the user opens the filter interface.
+     */
+    filterUpdatePast: function () {
+      //clear 'pastFiltered' array
       SMSMap.pastFiltered = [];
 
+      //loop through all 'currentFiltered' array and copy all elements to empty 'pastFiltered' array
       for ( var i = 0; i < SMSMap.currentFiltered.length; i++ ) {
         SMSMap.pastFiltered.push( SMSMap.currentFiltered[i] );
       }
 
-      SMSMap.testChangeAllowFilter( SMSMap.filterMainButton, false );
+      //disallow filter action
+      SMSMap.changeAllowFilter( SMSMap.filterMainButton, false );
     },
 
 
