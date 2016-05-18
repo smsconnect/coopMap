@@ -99,6 +99,10 @@ var SMSMap = {
 
 
 
+    /**
+     * Gets some page elements already on the DOM and adds some listeners that are
+     * necessary for users to interact with the app
+     */
     addListeners: function(){
       var closeButton = document.getElementsByClassName("close");
       var filterDisplayButton = document.getElementById("filter-display");
@@ -222,7 +226,6 @@ var SMSMap = {
 
 
 
-
     /**
      * Compares two objects that both have two arrays. Checks for equal length
      * and then checks to see if the elements that are passed to it have a
@@ -279,6 +282,7 @@ var SMSMap = {
         SMSMap.infoDivVisible = false;
       }
     },
+
 
 
     /**
@@ -506,6 +510,7 @@ var SMSMap = {
         SMSMap.filterByIndustry( currentStrings );
       }
     },
+
 
 
     /**
@@ -813,6 +818,7 @@ var SMSMap = {
           };
         }
     },
+
 
 
     /**
